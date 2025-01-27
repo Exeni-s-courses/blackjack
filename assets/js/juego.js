@@ -16,6 +16,8 @@ let puntosComputadora = 0;
 
 const [nuevoBtn, pedirBtn, detenerBtn] = document.querySelectorAll('.btn');
 const [ptsJugador, ptsComputadora] = document.querySelectorAll('small');
+const divCartasJugador = document.querySelector('#jugador-cartas');
+const divCartasComputadora = document.querySelector('#computadora-cartas');
 
 const crearDeck = () => {
     for (let i = 2; i <= 10; i++) {
@@ -69,9 +71,28 @@ const valorCarta = (carta) => {
 const carta = pedirCarta();
 const valor = valorCarta(carta);
 
+// Logica de la PC
+const turnoPC = (puntosMinimos) => {
+    do {
+        const carta = pedirCarta();
+        puntosComputadora += valorCarta(carta);
+        console.log(puntosComputadora)
+
+        ptsComputadora.innerText = puntosComputadora;
+
+        const imgCarta = document.createElement('img')
+        imgCarta.src = `assets/cartas/${carta}.png`;
+        imgCarta.classList.add('carta')
+        divCartasComputadora.append(imgCarta);
+
+        if (puntosMinimos > 21) {
+            break;
+        }
+
+    } while ((puntosComputadora < puntosMinimos) && (puntosMinimos <= 21));
+}
 
 // Eventos
-
 // Una función que se manda como argumento o parametro se llama callback
 pedirBtn.addEventListener('click', () => {
     const carta = pedirCarta();
@@ -80,4 +101,25 @@ pedirBtn.addEventListener('click', () => {
 
     ptsJugador.innerText = puntosJugador;
 
+    const imgCarta = document.createElement('img')
+    imgCarta.src = `assets/cartas/${carta}.png`;
+    imgCarta.classList.add('carta')
+    divCartasJugador.append(imgCarta);
+
+    if (puntosJugador > 21) {
+        console.warn('Lo siento mucho, perdiste');
+        pedirBtn.disabled = true;
+        turnoPC(puntosJugador);
+    } else if (puntosJugador === 21) {
+        console.warn('21 GENIAL!');
+        pedirBtn.disabled = true;
+        detenerBtn.disabled = true;
+        turnoPC(puntosJugador);
+    }
+});
+
+detenerBtn.addEventListener('click', () => {
+    detenerBtn.disabled = true;
+    pedirBtn.disabled = true;
+    turnoPC( puntosJugador );
 })
