@@ -9,6 +9,14 @@ let deck = [];
 const tipos = ['C', 'D', 'H', 'S'];
 const especiales = ['A', 'J', 'Q', 'K'];
 
+let puntosJugador = 0;
+let puntosComputadora = 0;
+
+// DOM
+
+const [nuevoBtn, pedirBtn, detenerBtn] = document.querySelectorAll('.btn');
+const [ptsJugador, ptsComputadora] = document.querySelectorAll('small');
+
 const crearDeck = () => {
     for (let i = 2; i <= 10; i++) {
         for (const tipo of tipos) {
@@ -35,8 +43,6 @@ const pedirCarta = () => {
         throw 'No hay cartas en el deck';
     };
     const carta = deck.pop();
-    console.log(deck)
-    console.log(carta)
     return carta;
 }
 
@@ -62,4 +68,16 @@ const valorCarta = (carta) => {
 
 const carta = pedirCarta();
 const valor = valorCarta(carta);
-console.log({ valor })
+
+
+// Eventos
+
+// Una función que se manda como argumento o parametro se llama callback
+pedirBtn.addEventListener('click', () => {
+    const carta = pedirCarta();
+    puntosJugador += valorCarta(carta);
+    console.log(puntosJugador)
+
+    ptsJugador.innerText = puntosJugador;
+
+})
